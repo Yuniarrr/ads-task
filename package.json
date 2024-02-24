@@ -3,17 +3,34 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "start:dev": "dotenv -e .env nodemon ./bin/www",
+    "migrate:db1": "sequelize db:migrate:undo:all --options-path ./.sequelize-database1 && sequelize-cli db:migrate --options-path ./.sequelize-database1",
+    "migrate:db2": "sequelize db:migrate:undo:all --options-path ./.sequelize-database2 && sequelize-cli db:migrate --options-path ./.sequelize-database2",
+    "setup": "docker compose up -d",
+    "seed:db1": "sequelize --options-path ./.sequelize-database1 db:seed:all",
+    "seed:db2": "sequelize --options-path ./.sequelize-database2 db:seed:all"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.5",
     "debug": "^4.1.1",
+    "dotenv": "^16.4.5",
     "ejs": "^3.1.3",
     "express": "^4.17.1",
-    "http-errors": "^1.8.0",
+    "http-errors": "^1.8.1",
+    "joi": "^17.12.2",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
+    "mysql2": "^3.9.1",
+    "nodemon": "^3.0.3",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
     "pg": "^8.2.1",
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.2.4"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.2"
   }
 }

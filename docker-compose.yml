@@ -1,27 +1,41 @@
-version: '2.1'
-
+version: '3'
 services:
-  api:
-    build: .
-    environment:
-      DB_USERNAME: postgres
-      DB_PASSWORD: test
-      DB_NAME: test
-      DB_HOSTNAME: db
-    ports:
-      - 3000:3000
-    depends_on:
-      db:
-        condition: service_healthy
-  db:
-    image: postgres:10
+  database-1:
+    container_name: database-postgresql
+    image: postgres:latest
     restart: always
     environment:
-      POSTGRES_PASSWORD: test
-      POSTGRES_DB: test
-      ALLOW_IP_RANGE: 0.0.0.0/0
+      POSTGRES_DB: ${POSTGRESQL_DATABASE}
+      POSTGRES_USER: ${POSTGRESQL_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
+    ports:
+      - ${POSTGRESQL_PORT}:5432
+    expose:
+      - ${POSTGRESQL_PORT}
+    volumes:
+      - ./docker/volumes/postgres:/var/lib/postgresql/data
+
+  database-2:
+    container_name: database-mysql
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: simple-auth
+      # MYSQL_USER: root
+      # MYSQL_PASSWORD: root
+      # MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3308:3306"
+    expose:
+      - "3308"
+    volumes:
+      - ./docker/volumes/mysql:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
+      test: [ "CMD", "mysqladmin", "ping", "-p${MYSQL_PASSWORD}" ]
+      retries: 3
       timeout: 5s
-      retries: 5
+
+volumes:
+  simple-auth:
+    driver: local

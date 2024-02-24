@@ -1,0 +1,9 @@
+const path = require('path');
+
+module.exports = {
+  "config": path.resolve('./config', 'database-config.js'),
+  "models-path": path.resolve('./models/database-2'),
+  "seeders-path": path.resolve('./seeders/database-2'),
+  "migrations-path": path.resolve('./migrations/database-2'),
+  "url": "mysql://root:root@127.0.0.1:3308/simple-auth"
+};

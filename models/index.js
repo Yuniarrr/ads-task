@@ -5,23 +5,37 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
+const config = require(__dirname + '/../config/database-config.js')[env];
 const db = {};
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+const databases = Object.keys(config.databases);
+
+for (let i = 0; i < databases.length; ++i) {
+  let database = databases[i];
+  let dbPath = config.databases[database];
+  db[database] = new Sequelize(dbPath.database, dbPath.username, dbPath.password, dbPath);
+  db[database].sync();
 }
 
 fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
-  })
+  .readdirSync(__dirname + '/database-1')
+  .filter(file =>
+    (file.indexOf('.') !== 0) &&
+    (file !== basename) &&
+    (file.slice(-3) === '.js'))
   .forEach(file => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+    const model = require(path.join(__dirname, '/database-1', file))(db.Database1, Sequelize.DataTypes);
+    db[model.name] = model;
+  });
+
+fs
+  .readdirSync(__dirname + '/database-2')
+  .filter(file =>
+    (file.indexOf('.') !== 0) &&
+    (file !== basename) &&
+    (file.slice(-3) === '.js'))
+  .forEach(file => {
+    const model = require(path.join(__dirname, '/database-2', file))(db.Database1, Sequelize.DataTypes);
     db[model.name] = model;
   });
 
@@ -31,7 +45,7 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
-db.sequelize = sequelize;
+// db.sequelize = db;
 db.Sequelize = Sequelize;
 
 module.exports = db;
