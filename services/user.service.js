@@ -1,15 +1,15 @@
 const User = require('../models').User;
 
 module.exports = {
-    findUserByEmail(email) {
-        return User.findOne({ where: { email: email } });
+    async findUserByEmail(email) {
+        return await User.findOne({ where: { email: email } });
     },
 
-    findUserByNoTelp(no_telp) {
-        return User.findOne({ where: { no_telp: no_telp } });
+    async findUserByNoTelp(no_telp) {
+        return await User.findOne({ where: { no_telp: no_telp } });
     },
 
-    findUserById(id) {
-        return User.findByPk(id);
+    async findUserById(id) {
+        return await User.findByPk(id);
     }
 }

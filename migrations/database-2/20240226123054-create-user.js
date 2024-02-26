@@ -10,19 +10,46 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       username: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       password: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       email: {
         type: Sequelize.STRING,
-        unique: true,
         allowNull: true,
+        unique: true,
       },
       no_telp: {
         type: Sequelize.STRING,
+        allowNull: true,
         unique: true,
+      },
+      otp_enabled: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      otp_ascii: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      otp_hex: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      otp_base32: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      otp_auth_url: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      secret: {
+        type: Sequelize.STRING,
         allowNull: true,
       },
       createdAt: {

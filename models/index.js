@@ -35,7 +35,7 @@ fs
     (file !== basename) &&
     (file.slice(-3) === '.js'))
   .forEach(file => {
-    const model = require(path.join(__dirname, '/database-2', file))(db.Database1, Sequelize.DataTypes);
+    const model = require(path.join(__dirname, '/database-2', file))(db.Database2, Sequelize.DataTypes);
     db[model.name] = model;
   });
 
