@@ -22,11 +22,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     no_telp: DataTypes.STRING,
     otp_enabled: DataTypes.BOOLEAN,
-    otp_ascii: DataTypes.STRING,
-    otp_hex: DataTypes.STRING,
-    otp_base32: DataTypes.STRING,
     otp_auth_url: DataTypes.STRING,
     secret: DataTypes.STRING,
+    name: DataTypes.STRING,
+    photo_profile: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'User',

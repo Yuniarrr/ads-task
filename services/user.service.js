@@ -1,15 +1,32 @@
-const User = require('../models').User;
+const userRepository = require('../repositories').users;
 
 module.exports = {
-    async findUserByEmail(email) {
-        return await User.findOne({ where: { email: email } });
-    },
+    async updateUser(req, res) {
+        console.log('Updating user');
 
-    async findUserByNoTelp(no_telp) {
-        return await User.findOne({ where: { no_telp: no_telp } });
+        const { name } = req.body;
+        let photo_profile;
+
+        if (req.file) {
+            const file = req.file;
+            photo_profile = `uploads/${file.originalname}`;
+        }
+
+        const { id } = req.user;
+
+        await userRepository.updateUser({ id: id }, {
+            name,
+            photo_profile,
+        });
     },
 
     async findUserById(id) {
-        return await User.findByPk(id);
+        const user = await userRepository.findUserById(id);
+
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        return user;
     }
 }

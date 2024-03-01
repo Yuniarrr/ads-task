@@ -12,9 +12,12 @@ module.exports = function (validator) {
             req.body = validated
             next()
         } catch (err) {
+            console.log("error in validators");
             if (err.isJoi)
-                return next(createHttpError(422, { message: err.message }))
-            next(createHttpError(500))
+                // return next(createHttpError(422, { message: err.message }))
+                return res.status(422).json({ message: err.message })
+            // next(createHttpError(500)) 
+            return res.status(500).json({ message: err.message })
         }
     }
 }
